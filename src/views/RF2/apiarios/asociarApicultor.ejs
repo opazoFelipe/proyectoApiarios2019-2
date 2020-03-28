@@ -1,0 +1,55 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+<!-- Mensaje de la validacion de campos con javascript en el navegador -->
+<div id="mensaje"></div>
+
+<script type="application/javascript" src="../../javascript/RF2/funcionesAsociarApicultor.js"></script>
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h3>Asignar Apicultor <% if (id) { %><%= id %><% } %></h3>
+            </div>
+            <div class="card-body">
+                <form action="/apiarios/modificarApicultorRol" method="POST" id="formaApiario">
+                    <div class="form-group row">
+                        <label for="apicultor" class="col-md-2 col-form-label"><b>Apiario:</b></label>
+                        <div class="col-md-10">
+                            <input type="text" id="apiario" name="apiario" value="<% if (id) { %><%= id %><% } %>" class="form-control" readonly required>
+                        </div>
+                    </div>                     
+                    <div class="form-group row">
+                        <label for="apicultor" class="col-md-2 col-form-label"><b>Apicultor:</b></label>
+                        <div class="col-md-10">
+                            <input type="text" id="apicultor" name="apicultor" class="form-control" placeholder="Apicultor" required>
+                        </div>
+                    </div>                  
+                    <div class="form-group row">
+                        <label for="roles" class="col-md-2 col-form-label"><b>Rol:</b></label>
+                        <div class="col-md-10">                        
+                            <select class="custom-select" name="roles" id="roles" required>
+                                <option value="0" selected>Rol</option>
+                                <option value="2">Administrador</option>
+                                <option value="3">Lector</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="resultado" class="col-md-2 col-form-label"><b>Resultado:</b></label>
+                        <div class="col-md-10">
+                            <p id="message" class="form-control"></p>
+                        </div>
+                    </div>                      
+                    <div class="form-group row">
+                        <div class="col-md-10   "></div> 
+                        <div class="col-md-2">
+                            <input type="submit" class="btn btn-primary" id="botonSubmit" value="Registrar Apiario" disabled>
+                        </div>
+                    </div>                  
+                </form>
+            </div>
+        </div>
+    </div>
+
+<%- include ('../../partials/footer')  %>

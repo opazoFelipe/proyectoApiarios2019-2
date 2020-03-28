@@ -1,0 +1,95 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+
+<!-- Mensaje de la validacion de campos con javascript en el navegador -->
+<div id="mensaje"></div>
+
+<script type="application/javascript" src="../../javascript/RF2/funcionesApiario.js"></script>
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h3>Modificar Datos de Apiario</h3>
+            </div>
+            <div class="card-body">
+                <form action="/apiarios/modificarDatos" method="POST" id="formaApiario">
+                    <div class="form-group row">
+                        <label for="id_apiario" class="col-md-2 col-form-label"><b>ID Apiario:</b></label>
+                        <div class="col-md-10">  
+                            <input class="form-control" type="number" name="id_apiario" id="id_apiario" 
+                                value="<% if (apiarios) { %><% apiarios.forEach(function(Apiario) { %><%= Apiario.ID_apiario %><% }); %><% } %>" 
+                                required readonly>
+                        </div>
+                    </div>    
+                    <div class="form-group row">
+                        <label for="estado" class="col-md-2 col-form-label"><b>Estado:</b></label>
+                        <div class="col-md-10">
+                            <select class="custom-select" name="estado" id="estado" required>
+                                <option value="0" selected>Estado</option>
+                                <% if (estados) { %>
+                                    <% estados.forEach(function(Estado) { %>
+                                        <% if (Estado.ID_estado != 3) { %>
+                                        <option value = "<%= Estado.ID_estado %>" <% if (apiarios) { %><% apiarios.forEach(function(Apiario) { %><% if (Apiario.ID_estado == Estado.ID_estado){%><%= "selected" %><% }}); %><% } %>><%= Estado.Descripcion %></option>
+                                    <% }}); %>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>                                   
+                    <div class="form-group row">
+                        <label for="region" class="col-md-2 col-form-label"><b>Región:</b></label>
+                        <div class="col-md-10">
+                            <select class="custom-select" name="region" id="region" required>
+                                <option value="0" selected>Región</option>
+                                <% if (regiones) { %>
+                                    <% regiones.forEach(function(Regiones) { %>
+                                        <option value = "<%= Regiones.ID_region %>" <% if (regionApiario) { %><% regionApiario.forEach(function(regionApiario) { %><% if (regionApiario.ID_region == Regiones.ID_region){%><%= "selected" %><% }}); %><% } %>><%= Regiones.Ordinal + " - " + Regiones.Nombre %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="comuna" class="col-md-2 col-form-label"><b>Comuna:</b></label>
+                        <div class="col-md-10">                        
+                            <select class="custom-select" name="comuna" id="comuna" required>
+                                <option value="0" selected>Comuna</option>
+                                <% if (comunas) { %>
+                                    <% comunas.forEach(function(Comuna) { %>
+                                        <option value = "<%= Comuna.ID_comuna %>" <% if (apiarios) { %><% apiarios.forEach(function(Apiario) { %><% if (Apiario.ID_comuna == Comuna.ID_comuna){%><%= "selected" %><% }}); %><% } %>
+                                        value = "<%= Comuna.ID_comuna %>"><%= Comuna.Nombre %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>   
+                    <div class="form-group row">
+                        <label for="calle" class="col-md-2 col-form-label"><b>Calle:</b></label>
+                        <div class="col-md-10">  
+                            <input type="text" name="calle" class="form-control" placeholder="Calle" value="<% if (apiarios) { %><% apiarios.forEach(function(Apiario) { %><%= Apiario.Calle %><% }); %><% } %>" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="numero" class="col-md-2 col-form-label"><b>Numero:</b></label>
+                        <div class="col-md-10">  
+                            <input type="number" name="numero" id="numero" class="form-control" value="<% if (apiarios) { %><% apiarios.forEach(function(Apiario) { %><%= Apiario.Numero %><% }); %><% } %>" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="fecha" class="col-md-2 col-form-label"><b>Fecha Creación:</b></label>
+                        <div class="col-md-10">  
+                            <input type="text" name="fecha" id="fecha" class="form-control" value="<% if (apiarios) { %><% apiarios.forEach(function(Apiario) { %><%= Apiario.Fecha_creacion %><% }); %><% } %>" required disabled>
+                        </div>
+                    </div>                                          
+                    <div class="form-group row">
+                        <div class="col-md-10"></div> 
+                        <div class="col-md-2">
+                            <input type="submit" class="btn btn-primary" id="botonSubmit" value="Registrar Apiario" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<%- include ('../../partials/footer')  %>

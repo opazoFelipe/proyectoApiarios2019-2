@@ -1,0 +1,183 @@
+<%- include('../../partials/header.ejs'); %>
+<%- include('../../partials/mensaje.ejs'); %>
+
+<% const diferencia = perPage - data.length %>
+    <div class="container mt-5">
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <form action="" method="GET" onsubmit="filtrar(this)">
+                    <div class="card">
+                        <h3 class="card-title pt-4 text-center">Colmenas Registradas</h3>
+                        <div class="card-body text-center">
+                            <div class="form-group row">
+                                <label for="fecha" class="col-sm-2 col-form-label">Buscar ID Colmena:</label>
+                                <div class="col-sm-3">
+                                   <input type="number" class="form-control" name="idColmena" id="idColmena">
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="submit" class="btn btn-primary" value="Buscar">
+                                </div>
+                                <% if(!isInactiveApiario) {%> 
+                                    <% if(!isLector) { %>
+                                    <div class="col-sm-4">
+                                        <a href="/colmenas/registrar/<%= idApiario %>" class="btn btn-primary">Registrar Nueva</a>
+                                    </div>
+                                    <% } %> 
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <% if(data && data.length > 0) {%>
+        <div class="table-responsive">
+            <table class="table table-borderer table-hover">
+                <thead class="thead-dark">
+                    <tr class="text-center">
+                        <th scope="col">ID Colmena</th>
+                        <th scope="col">Raza</th>
+                        <th scope="col">Origen</th>
+                        <th scope="col">ID Colmena Padre</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Fecha Creación</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.forEach(function(colmena) { %>
+                        <tr class="text-center">
+                            <td class="text-center"><%= colmena.ID_colmena%></td>
+                            <td><%= colmena.Raza%></td>
+                            <td><%= colmena.Descripcion_origen%></td>
+                            <% if(colmena.ID_origen != 3) {%> 
+                                <td>No Posee</td>
+                            <% } else {%>
+                                <td><%= colmena.ID_colmena_padre%></td>
+                            <% } %>  
+                            <td><%= colmena.Estado%></td>
+                            <td><%= colmena.Fecha_creacion%></td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <% if(!isInactiveApiario) {%> 
+                                        <% if(!isLector) { %>
+                                        <a href="/colmenas/modificar/<%= colmena.ID_colmena %>&<%= current %>&<%= idApiario %> " class="btn btn-primary">Modificar</a>
+                                        <% } %>
+                                    <% } %> 
+                                    <a href="/colmenas/detalles/<%= colmena.ID_colmena %>&<%= current %>&<%= idApiario %>" class="btn btn-info">Detalles</a>
+                                    <a href="/cosechas/listar/<%= colmena.ID_colmena %>" class="btn btn-info">Cosechas</a>
+                                </div>
+                            </td>
+                        </tr> 
+                    <% }); %>
+                    <% if(data.length < 6) {%>
+                        <% for(let i = 0; i < diferencia; i++) {%>
+                            <tr style="border: none; background-color: white;">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button class="btn disabled" disabled style="background-color: white; color:white">Modificar</button></td>
+                            </tr>
+                        <% } %> 
+                    <%}%>
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <% if(pages) { %> 
+                <nav class="mx-auto">
+                    <ul class="pagination">
+                        <% if(current == 1) { %>
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link mr-5">Primera Página</a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link">Anterior</a>
+                            </li>
+                        <% } else { %> 
+                            <li class="page-item">
+                                <a href="/colmenas/listar/1&<%= idApiario %> " class="page-link mr-5">Primera Página</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="/colmenas/listar/<%= Number(current) - 1 %>&<%= idApiario %> " class="page-link">Anterior</a>
+                            </li>
+                        <% } %> 
+
+                        <!-- Paginas -->
+                        <% let i = (Number(current) > 5 ? Number(current) - 4 : 1) %> 
+                        <% if(i !== 1) { %> 
+                            <a href="#" class="page-link">...</a>
+                        <% } %>
+                        <% for(; i <= (Number(current) + 4) && i <= pages; i++) {%> 
+                            <% if(i == current) { %>
+                                <li class="page-item disabled">
+                                    <a href="<%= i %>" class="page-link" style="background: orange; color: white;">
+                                    <%= i %>
+                                    </a>
+                                </li>
+                            <% } else {%> 
+                                <li class="page-item">
+                                    <a href="/colmenas/listar/<%= i %>&<%= idApiario %>" class="page-link">
+                                        <%= i %> 
+                                    </a>
+                                </li>
+                            <% } %>
+                            <% if(i == Number(current) + 4 && i < pages) {%> 
+                                <li class="page-item">
+                                    <a href="#" class="page-link">...</a>
+                                </li>
+                            <% } %> 
+                        <% } %>
+
+                        <!-- Ultima pagina -->
+                        <% if(current == pages) {%> 
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link">Siguiente</a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a href="#>" class="page-link ml-5" > Última Página  </a>
+                            </li>                       
+                        <% } else {%> 
+                            <li class="page-item">
+                                <a href="/colmenas/listar/<%= (Number(current) + 1) %>&<%= idApiario %>" class="page-link">Siguiente</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="/colmenas/listar/<%= pages  %>&<%= idApiario %> " class="page-link ml-5"> Última Página  </a>
+                            </li>
+                        <% } %> 
+                    </ul>
+                </nav>
+            <% } %> 
+        </div>
+    </div>
+<% } else { %>
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="card-header text-center">
+                <h3 class="card-title">No se han encontrado Colmenas</h3>
+            </div>
+        </div>
+    </div>
+<% } %> %>
+
+<script>
+
+    function filtrar(form) {
+
+        event.preventDefault();
+        const idColmena = form.idColmena.value;
+
+        if(idColmena.length < 1) return alert('ingrese ID colmena');
+        if(isNaN(idColmena)) return alert('Solo se permiten números en ID de Colmena');
+
+        const rutaDetalle = '/colmenas/detalles/' + idColmena + '&<%= Number(current) %>&<%= idApiario %>';
+        window.location.href = rutaDetalle;
+
+    }
+
+</script>
+
+<%- include('../../partials/footer.ejs'); %>

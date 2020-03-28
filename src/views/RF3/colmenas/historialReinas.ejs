@@ -1,0 +1,44 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+<% if(historialReinas.tieneHistorial) { %>
+    <div class="container">
+        <a href="/colmenas/detalles/<%= idColmena %>&<%= currentPage %>&<%= idApiario %>" class="btn btn-secondary mt-2"> Volver </a>
+        <div class="row mt-4">
+            <% historialReinas.antiguas.forEach(function(ra, index) { %>
+                <div class="col-md-4 mb-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title" style="color: green"><span class="font-weight-bold">ID Cambio: </span><%= ra.ID_cambio%></h6>
+                            <% if(index == 0) { %>
+                                <p class="card-title"><span class="font-weight-bold">ID Reina cambiada: </span><%= ra.ID_reina_antigua%> <span class="text-primary font-weight-bold"> ( Última Cambiada )</span></p>
+                            <% } else { if(index == (historialReinas.antiguas.length) - 1) { %> 
+                                <p class="card-title"><span class="font-weight-bold">ID Reina Reina Cambiada: </span><%= ra.ID_reina_antigua%> <span class="text-primary font-weight-bold"> ( Primera Reina de la Colmena )</span></p>
+                                <% } else { %> 
+                                    <p class="card-title"><span class="font-weight-bold">ID Reina cambiada: </span><%= ra.ID_reina_antigua%></p>
+                                <% } %> 
+                            <% } %> 
+                            <p><span class="font-weight-bold">Raza: </span><%= ra.Raza%></p>
+                            <p><span class="font-weight-bold">Fecha de Creación: </span><%= ra.fecha_creacion%></p>
+                            <p><span class="font-weight-bold">Motivo de ser cambiada: </span></p>
+                            <textarea name="" id="" rows="4" class=" text-center" style="resize: none; width: 100%; border: none;"><%= ra.Motivo%></textarea>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+<% } else { %>
+    <a href="/colmenas/detalles/<%= idColmena %>&<%= currentPage %>&<%= idApiario %> " class="btn btn-secondary mt-2"> Volver </a>
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title"><span class="font-weight-bold">ID: </span><%= historialReinas.actual.ID_reina%> <span class="font-weight-bold"> ( Reina Actual )</span></p>
+                <p><span class="font-weight-bold">Raza: </span><%= historialReinas.actual.Raza%></p>
+                <p><span class="font-weight-bold">Fecha de Creación: </span><%= historialReinas.actual.Fecha_creacion%></p>
+            </div>
+        </div>
+    </div>
+<% } %> 
+
+<%- include ('../../partials/footer')  %>

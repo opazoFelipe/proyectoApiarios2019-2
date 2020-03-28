@@ -1,0 +1,38 @@
+<%- include ('../../partials/header')  %>
+
+<%- include ('../../partials/mensaje')  %>
+
+<div class="container">
+    <div class="card text-center mt-5">
+        <div class="card-header">
+            <h3 class="card-title"> Datos Personales</h3>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Rut</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido Paterno</th>
+                    <th scope="col">Apellido Materno</th>
+                    <th scope="col">Correo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row"><%= user.ID_apicultor %></th>
+                    <td><%= user.Nombre %></td>
+                    <td><%= user.Apellido_paterno %></td>
+                    <td><%= user.Apellido_materno %></td>
+                    <td><%= user.Correo %></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br>
+              <a href="/apicultores/modificarDatos" class="btn btn-primary btn-sm">Modificar Datos</a>
+              <a href="/apicultores/cambiarPassword" class="btn btn-primary btn-sm">Cambiar Contraseña</a>
+        </div>
+    </div>
+</div>
+
+<%- include ('../../partials/footer')  %>

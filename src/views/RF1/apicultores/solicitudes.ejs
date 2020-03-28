@@ -1,0 +1,211 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+<script src="../../jquery-3.4.1.min.js"></script>
+
+<% if(data == 'undefined') window.location.href = "/apicultores/solicitudes/"+current; %> 
+
+<input type="hidden" id="hiddenCurrentPage" value="<%= Number(current) %>">
+
+<% const diferencia = perPage - data.length %>
+
+    <div class="container mt-5">
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <form action="" method="GET" onsubmit="filtrar(this)">
+                    <div class="card">
+                        <h3 class="card-title pt-4 text-center">Solicitudes de Registro</h3>
+                        <div class="card-body text-center">
+                            <div class="form-group row">
+                                <label for="fecha" class="col-sm-2 col-form-label">Filtrar por Fecha:</label>
+                                <div class="col-sm-3">
+                                    <input type="date" class="form-control" name="fecha" id="" value="<%= fechaFiltro %>">
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="submit" class="btn btn-primary" value="Filtrar">
+                                </div>
+                                <div class="col-sm-2 offset-sm-3">
+                                    <a href="/apicultores/solicitudes/1&0" class="btn btn-secondary">Ver Todas</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <% if(data.length > 0) { %>
+        <table class="table table-borderer text-center table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Rut</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Fecha de Creación</th>
+                    <th scope="col">Estado de Solicitud</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <% if (data) { %>
+                    <% data.forEach(function(apicultor) { %>
+                <tr>
+                    <td><%= apicultor.ID_apicultor %></td>
+                    <td><%= apicultor.Nombre+" "+apicultor.Apellido_paterno+" "+apicultor.Apellido_materno%></td>
+                    <td><%= apicultor.Fecha_creacion %></td>
+                    <td><%= apicultor.Descripcion_estado %></td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="acciones-lista">
+                            <form action="/apicultores/aceptar/<%= apicultor.ID_apicultor %>&<%= Number(current) %>&<%= fechaFiltro %>" id="formAceptarSolicitud" method="POST">
+                                <input type="hidden" name="currentPage" value="<%= Number(current) %>">
+                                  <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
+                                    Aceptar
+                                </button>
+                            </form>
+                            <form action="/apicultores/formularioRechazo/<%= apicultor.ID_apicultor %>&<%= Number(current) %>" method="GET">
+                                <input type="hidden" name="currentPage" value="<%= Number(current) %>">
+                                <input type="submit" class="btn btn-danger" value="Rechazar">
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <% }); %>
+                <% if(data.length < 6) {%>
+                    <% for(let i = 0; i < diferencia; i++) {%>
+                        <tr style="border: none; background-color: white;">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><button class="btn disabled" disabled style="background-color: white; color:white">Modificar</button></td>
+                        </tr>
+                    <% } %> 
+                <%}%>
+                <% } %>
+
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <% if(pages) { %> 
+                <nav class="mx-auto">
+                    <ul class="pagination">
+                        <% if(current == 1) { %>
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link mr-5">Primera Página</a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link">Anterior</a>
+                            </li>
+                        <% } else { %> 
+                            <li class="page-item">
+                                <a href="/apicultores/solicitudes/1&<%= fechaFiltro %>" class="page-link mr-5">Primera Página</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="/apicultores/solicitudes/<%= Number(current) - 1 %>&<%= fechaFiltro %>" class="page-link">Anterior</a>
+                            </li>
+                        <% } %> 
+
+                        <!-- Paginas -->
+                        <% let i = (Number(current) > 5 ? Number(current) - 4 : 1) %> 
+                        <% if(i !== 1) { %> 
+                            <a href="#" class="page-link">...</a>
+                        <% } %>
+                        <% for(; i <= (Number(current) + 4) && i <= pages; i++) {%> 
+                            <% if(i == current) { %>
+                                <li class="page-item disabled">
+                                    <a href="<%= i %>&<%= fechaFiltro %>" class="page-link" style="background: orange; color: white;">
+                                    <%= i %>
+                                    </a>
+                                </li>
+                            <% } else {%> 
+                                <li class="page-item">
+                                    <a href="/apicultores/solicitudes/<%= i %>&<%= fechaFiltro %>" class="page-link">
+                                        <%= i %> 
+                                    </a>
+                                </li>
+                            <% } %>
+                            <% if(i == Number(current) + 4 && i < pages) {%> 
+                                <li class="page-item">
+                                    <a href="#" class="page-link">...</a>
+                                </li>
+                            <% } %> 
+                        <% } %>
+
+                        <!-- Ultima pagina -->
+                        <% if(current == pages) {%> 
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link">Siguiente</a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a href="#>" class="page-link ml-5" > Última Página  </a>
+                            </li>                       
+                        <% } else {%> 
+                            <li class="page-item">
+                                <a href="/apicultores/solicitudes/<%= (Number(current) + 1)  %>&<%= fechaFiltro %>" class="page-link">Siguiente</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="/apicultores/solicitudes/<%= pages  %>&<%= fechaFiltro %>" class="page-link ml-5"> Última Página  </a>
+                            </li>
+                        <% } %> 
+                    </ul>
+                </nav>
+            <% } %> 
+        </div>
+        <% } else { %>
+            <div class="row mt-5">
+                <div class="col-md-6 offset-md-3">
+                    <div class="card-header text-center">
+                        <h3 class="card-title">No se han encontrado Solicitudes</h3>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirmar Acción</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="aceptarSolicitud()">Aceptar Solicitud</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    });
+
+    function aceptarSolicitud() {
+        $('#formAceptarSolicitud').submit();
+    }
+   
+    function filtrar( form ) {
+        
+        event.preventDefault();
+       if(form.fecha.value.length < 1) return alert('seleccione fecha');
+
+       let currentPage = parseInt( document.getElementById("hiddenCurrentPage").value );
+
+       const ruta = '/apicultores/solicitudes/' + 1 + '&' + form.fecha.value;
+
+       window.location.href = ruta;
+
+    }
+
+
+</script>
+
+
+<%- include ('../../partials/footer')  %>

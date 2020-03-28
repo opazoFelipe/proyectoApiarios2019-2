@@ -1,0 +1,81 @@
+<%- include ('../../partials/header')  %>
+
+<%- include ('../../partials/mensaje')  %>
+
+<div class="container mt-5">
+    <h1 class="text-center">Cambiar Rol</h1>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/apicultores/cambiarRol/<%= a.ID_apicultor %>&<%= currentPage %>&<%= fechaFiltro %>" method="POST" id="formRol">
+                        <div class="form-group">
+                            <label for="rut">Rut:</label>
+                            <input type="text" class="form-control" name="rut" value="<%= a.ID_apicultor %>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" class="form-control" name="nombre"
+                                value="<%= a.Nombre + " " + a.Apellido_paterno + " " + a.Apellido_materno %>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="rol">Seleccione Rol:</label>
+                            <select multiple class="form-control" name="selectRol" autofocus>
+                                <% rolSistema.forEach(function(r) { %>
+                                    <% if(r.ID_rolSistema == a.ID_rolSistema) { %> 
+                                        <option value="<%= r.ID_rolSistema %>" selected><%= r.Descripcion %></option>
+                                    <% } else {%> 
+                                        <option value="<%= r.ID_rolSistema%>"><%= r.Descripcion %></option>
+                                    <% } %> 
+                                <% }) %> 
+                            </select>
+                        </div>
+                        <input type="hidden" name="currentPage" value="<%= currentPage %>">
+                        <div class="form-group">
+                             <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Guardar
+                            </button>
+                            
+                            <a href="/apicultores/aceptados/<%= currentPage %>&<%= fechaFiltro %>" class="btn btn-secondary" style="float: right;"> volver</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirmar Acción</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="cambiarRol()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    });
+
+    function cambiarRol() {
+        $('#formRol').submit();
+    }
+
+</script>
+
+
+<%- include ('../../partials/footer')  %>
+

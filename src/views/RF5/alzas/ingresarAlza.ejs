@@ -1,0 +1,196 @@
+<%- include ('../../partials/header')  %>
+
+<%- include ('../../partials/mensaje')  %>
+
+<input type="hidden" id="alzasActuales" value="<%= dataView.alzas.mediasAlzasActuales %>">
+<input type="hidden" id="cantidadAlzaParaSacar" value="<%= dataView.alzas.mediasAlzasParaSacar %>">
+<input type="hidden" id="cantidadAlzaParaPoner" value="<%= dataView.alzas.mediasAlzasParaPoner %>">
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3> Registrar Alza </h3>
+        </div>
+        <div class="card-body">
+            <form action="/colmenas/alzas/registrar/<%= id %>&<%= currentPage %>&<%= idApiario %> " method="POST" id="formularioAlza">
+    
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-4"><p class="text-center"> 
+                                <span class="font-weight-bold">Alzas Actuales: (Medias alzas / 2)</span><br>
+                                <%= Math.floor(dataView.alzas.mediasAlzasActuales / 2)  %>
+                            </p></div>
+                            <div class="col-md-4"><p class="text-center"> <span class="font-weight-bold">Medias Alzas Actuales: </span><br></brZ>
+                                <%= dataView.alzas.mediasAlzasActuales %> 
+                            </p></div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2 form-group">
+                                <label for="idAccion">Tipo Accion:</label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select class="form-control" name="idAccion" id="idAccion" onchange="cambiarCantidadAlza()">
+                    
+                                        <% dataView.accionesAlzas.forEach(function(aa) { %>
+            
+                                                <option value="<%= aa.ID_accion %>"><%= aa.Descripcion %></option>
+                    
+                                        <% }); %> 
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2 form-group">
+                                <label for="idTipoAlza">Tipo alza:</label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select class="form-control" name="idTipoAlza" id="idTipoAlza" onchange="cambiarCantidadAlza()">
+                    
+                                    <% dataView.tiposAlzas.forEach(function(ta) { %>
+        
+                                            <option value="<%= ta.ID_tipoAlza %>"><%= ta.Descripcion %></option>
+                
+                                    <% }); %> 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group">
+                                <label for="cantidad">Cantidad:</label>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <select class="form-control" name="cantidad" id="cantidad">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <!-- Button trigger Guardar Colmena -->
+                    <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">
+                        Guardar
+                    </button>
+                    <a href="/colmenas/detalles/<%= Number(id) %>&<%= Number(currentPage) %>&<%= idApiario %> " class="btn btn-secondary mt-2 ml-2"> Volver </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    window.onload = cambiarCantidadAlza;
+
+    function cambiarCantidadAlza() {
+
+        // ma = mediasAlzas
+        let maActuales = parseInt( document.getElementById("alzasActuales").value );
+        let maParaSacar = parseInt( document.getElementById("cantidadAlzaParaSacar").value );
+        let maParaPoner = parseInt( document.getElementById("cantidadAlzaParaPoner").value );
+        let selectAccion = document.getElementById("idAccion");
+        let selectTipoAlza = document.getElementById("idTipoAlza");
+        let selectCantidadAlza = document.getElementById("cantidad");
+
+        // Agregar
+        if (selectAccion.value == 2 && maParaPoner != 0) {
+
+             // alza
+             if (selectTipoAlza.value == 1) {
+
+                let alza = (maParaPoner / 2) + 1;
+                alza = Math.floor(alza);
+                selectCantidadAlza.innerHTML = "";
+
+                for (let i = 0; i < alza; i++) {
+                    let option = document.createElement("option");
+                    option.value = i;
+                    option.innerHTML = i;
+                    selectCantidadAlza.appendChild(option);
+                }
+            }
+
+            // media alza
+            if (selectTipoAlza.value == 2 ) {
+
+                let alza = maParaPoner + 1;
+                selectCantidadAlza.innerHTML = "";
+                
+                for (let i = 0; i < alza; i++) {
+                    let option = document.createElement("option");
+                    option.value = i;
+                    option.innerHTML = i;
+                    selectCantidadAlza.appendChild(option);
+                }
+            }
+
+        }
+
+        // Sacar Alza
+        if (selectAccion.value == 3 && maParaSacar != 0) {
+
+            // alza
+            if (selectTipoAlza.value == 1) {
+
+                let alza = (maParaSacar / 2) + 1;
+                alza = Math.floor(alza);
+                selectCantidadAlza.innerHTML = "";
+
+                for (let i = 0; i < alza; i++) {
+                    let option = document.createElement("option");
+                    option.value = i;
+                    option.innerHTML = i;
+                    selectCantidadAlza.appendChild(option);
+                }
+            }
+
+            // media alza
+            if (selectTipoAlza.value == 2) {
+
+                let alza = maParaSacar + 1;
+                selectCantidadAlza.innerHTML = "";
+
+                for (let i = 0; i < alza; i++) {
+                    let option = document.createElement("option");
+                    option.value = i;
+                    option.innerHTML = i;
+                    selectCantidadAlza.appendChild(option);
+                }
+            }
+
+        }
+    }
+
+    function enviarFormulario() {
+
+        document.getElementById("formularioAlza").submit();
+
+    }
+
+</script>
+
+<!-- Modal Confirmar Accion -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar Acción</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="enviarFormulario()"> Guardar Registro de Alza</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include ('../../partials/footer')  %>

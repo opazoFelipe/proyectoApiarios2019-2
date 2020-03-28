@@ -1,0 +1,192 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+
+<div id="mensaje" style="z-index: 100000;"></div>
+
+<input type="hidden" id="idColmena" value="<%= detalleColmena.general.ID_colmena %>">
+<input type="hidden" id="idReina" value="<%= detalleColmena.general.ID_reina %>">
+<input type="hidden" id="currentPage" value="<%= currentPage %>">
+
+<input type="hidden" id="razaInicial" value="<%= detalleColmena.general.Raza %>">
+<input type="hidden" id="descripcionReinaInicial" value="<%= detalleColmena.general.Descripcion_reina %>">
+
+
+<script src="../../qrcode.js"></script>
+<script src="../../javascript/RF3/funcionesColmenas.js"></script>
+<script src="../../javascript/RF3/generarQR.js"></script>
+
+<div class="container mt-3">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="btn-group ml-3" role="group" aria-label="Basic example">
+                    <a href="/colmenas/listar/<%= currentPage %>&<%= idApiario  %> " class="btn btn-secondary"> Volver </a>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="generarQrColmena()">
+                        Generar QR
+                    </button>
+                </div>
+                <h3 class="text-center ml-4">ID Colmena: <%= detalleColmena.general.ID_colmena %></h3>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mt-4"> 
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Origen Colmena</h4>
+                            <p><span class="font-weight-bold">Fecha de creación: </span><%= detalleColmena.general.Fecha_creacion_colmena %></p>
+                            <p><%= detalleColmena.general.Origen %></p>
+                            <% if(detalleColmena.general.ID_origen == 3) { %> 
+                                <p><span class="font-weight-bold">ID Colmena Padre: </span><%= detalleColmena.general.ID_padre %> </p>
+                            <% } %> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="mb-2 text-center">Reina</h4>
+                            <p><span class="font-weight-bold">ID Reina: </span><%= detalleColmena.general.ID_reina %></p>
+                            <p id="parrafoRaza"><span class="font-weight-bold">Raza: </span><%= detalleColmena.general.Raza %></p>
+                            <p id="parrafoDescripcion"><span class="font-weight-bold">Descripción: </span><br><%= detalleColmena.general.Descripcion_reina %></p>
+                            <% if(!detalleColmena.tieneHistorial) { %>
+                                <p id="parrafoDescripcion"><span class="font-weight-bold">Fecha de Creación: </span><br><%= detalleColmena.general.Fecha_creacion_colmena %></p>
+                            <% } %>  
+                            
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <% if(!isInactiveApiario) { %>
+                                    <% if(!isInactiveColmena) {%>
+                                        <% if(!isLector) {%>
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-primary" id="botonModalReina" data-toggle="modal" data-target="#modalModificarDatosReina">
+                                                Modificar Datos
+                                            </button>
+                                        <% } %>
+                                    <% } %>
+                                <% } %> 
+                                <a href="/colmenas/historialReinas/<%= detalleColmena.general.ID_colmena %>&<%= currentPage %>&<%= idApiario %> " class="btn btn-info">Historial</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Apiario </h4>
+                            <p><span class="font-weight-bold">ID Apiario: </span><%= detalleColmena.general.ID_apiario %></p>
+                            <p><span class="font-weight-bold">Dirección: </span>Calle <%= detalleColmena.general.Calle%>, Número <%= detalleColmena.general.Numero %></p>
+                            <p><span class="font-weight-bold">Comuna: </span><%= detalleColmena.general.Comuna %></p>
+                            <p><span class="font-weight-bold">Región: </span><%= detalleColmena.general.Region %></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Medias Alzas </h4>
+                            <p><span class="font-weight-bold">Cantidad Total: </span><%= detalleColmena.mediasAlzasTotales %></p>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <% if(!isInactiveApiario) { %>
+                                    <% if(!isInactiveColmena) {%>
+                                        <% if(!isLector) {%>
+                                        <a href="/colmenas/alzas/registrar/<%= detalleColmena.general.ID_colmena %>&<%= Number(currentPage) %>&<%= idApiario %> " class="btn btn-primary">Agregar o Sacar </a>
+                                        <% } %>
+                                    <% } %>
+                                <% } %>
+                                <a href="/colmenas/alzas/listar/<%= detalleColmena.general.ID_colmena %>&1&<%= idApiario %> " class="btn btn-info">Historial</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Colmenas Generadas </h4>
+                            <p><span class="font-weight-bold">Cantidad Total: </span><%= detalleColmena.cantidadHijas %></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Estado </h4>
+                            <p><span class="font-weight-bold">Actual: </span><%= detalleColmena.general.Estado %></p>
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal QR-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body mx-auto">
+            <div id="output"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="descargarQR()">Descargar QR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal Modificar Datos de Reina -->
+<div class="modal fade" id="modalModificarDatosReina" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modificar Datos de Reina</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container mt-2">
+                    <div class="card" style="border: none;">
+                        <div class="card-body">
+                            <form action="#" onsubmit="modificarDatosReina(this)">
+                                <div class="form-group row">
+                                    <label for="raza">Raza Reina:</label>
+                                    <input type="text" class="form-control" name="raza" id="raza" value="<%= detalleColmena.general.Raza %>">
+                                </div>
+                                <div class="form-group row">                                
+                                    <label for="descripcion">Descripción Reina:</label>
+                                    <textarea name="descripcion" id="descripcion" class="form-control" cols="10" rows="4"
+                                        placeholder="Ingrese descripción para nueva Reina"><%= detalleColmena.general.Descripcion_reina %></textarea>                               
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary form-control" value="Guardar">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+
+        document.getElementById("botonModalReina").addEventListener("click", function() {
+            let razaInicial = document.getElementById("razaInicial").value;
+            let descripcionReinaInicial = document.getElementById("descripcionReinaInicial").value;
+            document.getElementById("raza").value = razaInicial;
+            document.getElementById("descripcion").innerHTML = descripcionReinaInicial;
+        });
+    }     
+</script>
+
+<%- include ('../../partials/footer')  %>

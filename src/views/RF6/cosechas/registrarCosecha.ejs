@@ -1,0 +1,57 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+<script type="application/javascript" src="../../javascript/RF6/funcionesCosechas.js"></script>
+
+<!-- Mensaje de la validacion de campos con javascript en el navegador -->
+<div id="mensaje"></div>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h3> Registrar Cosecha </h3>
+            </div>
+            <div class="card-body">
+                <form action="/cosechas/guardarCosecha" method="POST" id="formaApiario">
+                    <div class="form-group row">
+                        <label for="id_colmena" class="col-md-2 col-form-label"><b>ID Colmena:</b></label>
+                        <div class="col-md-10">  
+                            <input type="text" name="id_colmena" class="form-control" value="<% if (id) { %><%= id %><% }%>" readonly>
+                        </div>
+                    </div>                    
+                    <div class="form-group row">
+                        <label for="medida" class="col-md-2 col-form-label"><b>Medida:</b></label>
+                        <div class="col-md-10">                        
+                            <select class="custom-select" name="medida" id="medida" required>
+                                <option value="0" selected>Medida</option>
+                                <% if (medidas) { %>
+                                    <% medidas.forEach(function(Medida) { %>
+                                <option value = "<%= Medida.ID_medida %>"><%= Medida.Nombre + " (" + Medida.Simbolo + ")" %></option>
+                                <% }); %>
+                                <% } %>                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cantidad" class="col-md-2 col-form-label"><b>Cantidad:</b></label>
+                        <div class="col-md-10">  
+                            <input type="number" name="cantidad" class="form-control" placeholder="Cantidad" required>
+                        </div>
+                    </div> 
+                    <div class="form-group row">
+                        <label for="descripcion" class="col-md-2 col-form-label"><b>Descripcion:</b></label>
+                        <div class="col-md-10">  
+                            <input type="text" name="descripcion" class="form-control" placeholder="Descripcion" required>
+                        </div>
+                    </div>                                            
+                    <div class="form-group row">
+                        <div class="col-md-10"></div> 
+                        <div class="col-md-2">
+                            <input type="submit" class="btn btn-primary" id="botonSubmit" value="Registrar Cosecha" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<%- include ('../../partials/footer')  %>

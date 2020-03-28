@@ -1,0 +1,55 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-9">
+                <h3>Listado de Cosechas - Colmena <% if (id) { %><%= id %><% } %></h3><br/>
+                <% if (rol) { rol.forEach(function(Rol) { if (Rol.ID_estado == 1) { %>
+                <form action="/cosechas/registrar/<% if (id) { %><%= id %><% }%>" method="POST">
+                    <input type="submit" class="btn btn-primary" value="Registrar Cosecha">
+                </form>
+                <% }});} %>         
+            </div>
+        </div>    
+        <br/>                  
+        <table class="table table-borderer table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Cosecha</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Encargado</th>
+                    <th scope="col">Fecha extracción</th>
+                    <th scope="col">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <% if (cosechas) { %>
+                    <% cosechas.forEach(function(Cosecha) { %>
+                <tr>
+                    <td><%= Cosecha.ID_cosecha %></td>
+                    <td><%= Cosecha.Cantidad + Cosecha.Simbolo %></td>
+                    <td><%= Cosecha.Descripcion %></td>
+                    <td><%= Cosecha.Rut_jefe %></td>
+                    <td><%= Cosecha.Fecha %></td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="acciones-lista">   
+                        <% if (rol) { rol.forEach(function(Rol) { if ((Rol.ID_rol == 1  || Rol.ID_rol == 2) && Rol.ID_estado == 1) { %> 
+                            <form action="/cosechas/modificar/<% if (id) { %><%= id %><% } %>/<%= Cosecha.ID_cosecha %>" method="POST">
+                                <input type="submit" class="btn btn-success" value="Modificar">
+                            </form>                          
+                        <% }});} %> 
+                        </div>
+                    </td>
+                </tr>
+                <% }); %>
+                <% } %>
+                </tr>
+            </tbody>
+        </table><br/>
+    </div>
+
+
+<%- include ('../../partials/footer')  %>

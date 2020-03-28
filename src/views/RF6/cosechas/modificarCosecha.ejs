@@ -1,0 +1,76 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+<script src="../../../jquery-3.4.1.min.js"></script>
+<script type="application/javascript" src="../../../javascript/RF6/funcionesCosechas.js"></script>
+
+<!-- Mensaje de la validacion de campos con javascript en el navegador -->
+<div id="mensaje"></div>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h3> Modificar Cosecha </h3>
+            </div>
+            <div class="card-body">           
+                <form action="/cosechas/modificarDatos" method="POST" id="formaApiario">
+                    <div class="form-group row">
+                        <label for="id_colmena" class="col-md-2 col-form-label"><b>ID Colmena:</b></label>
+                        <div class="col-md-10">  
+                            <input type="text" name="id_colmena" class="form-control" value="<% if (id) { %><%= id %><% }%>" readonly>
+                        </div>
+                    </div>                          
+                    <div class="form-group row">
+                        <label for="id_cosecha" class="col-md-2 col-form-label"><b>ID Cosecha:</b></label>
+                        <div class="col-md-10">  
+                            <input type="text" name="id_cosecha" class="form-control" value="<% if (cosechas) { %><% cosechas.forEach(function(Cosecha) { %><%= Cosecha.ID_cosecha %><% }); %><% } %>" readonly>
+                        </div>
+                    </div>                    
+                    <div class="form-group row">
+                        <label for="medida" class="col-md-2 col-form-label"><b>Medida:</b></label>
+                        <div class="col-md-10">                        
+                            <select class="custom-select" name="medida" id="medida" required>
+                                <option value="0" selected>Medida</option>
+                                <% if (medidas) { %>
+                                    <% medidas.forEach(function(Medida) { %>
+                                <option value = "<%= Medida.ID_medida %>" <% if (cosechas) { %><% cosechas.forEach(function(Cosecha) { if (Cosecha.ID_medida == Medida.ID_medida) { %><%= "selected" %><% }}); %><% } %> ><%= Medida.Nombre + " (" + Medida.Simbolo + ")" %></option>
+                                <% }); %>
+                                <% } %>                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="cantidad" class="col-md-2 col-form-label"><b>Cantidad:</b></label>
+                        <div class="col-md-10">  
+                            <input type="number" name="cantidad" class="form-control" placeholder="Cantidad" value="<% if (cosechas) { %><% cosechas.forEach(function(Cosecha) { %><%= Cosecha.Cantidad %><% }); %><% } %>" required>
+                        </div>
+                    </div> 
+                    <div class="form-group row">
+                        <label for="descripcion" class="col-md-2 col-form-label"><b>Descripcion (Opcional):</b></label>
+                        <div class="col-md-10">  
+                            <input type="text" name="descripcion" class="form-control" placeholder="Descripcion" value="<% if (cosechas) { %><% cosechas.forEach(function(Cosecha) { %><%= Cosecha.Descripcion %><% }); %><% } %>">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="encargado" class="col-md-2 col-form-label"><b>Encargado:</b></label>
+                        <div class="col-md-10">  
+                            <input type="text" class="form-control" value="<% if (cosechas) { %><% cosechas.forEach(function(Cosecha) { %><%= Cosecha.Rut_jefe %><% }); %><% } %>" readonly>
+                        </div>
+                    </div>  
+                    <div class="form-group row">
+                        <label for="fecha" class="col-md-2 col-form-label"><b>Fecha:</b></label>
+                        <div class="col-md-10">  
+                            <input type="text" name="fecha" class="form-control" value="<% if (cosechas) { %><% cosechas.forEach(function(Cosecha) { %><%= Cosecha.Fecha %><% }); %><% } %>" readonly>
+                        </div>
+                    </div>                                                                                        
+                    <div class="form-group row">
+                        <div class="col-md-10"></div> 
+                        <div class="col-md-2">
+                            <input type="submit" class="btn btn-primary" id="botonSubmit" value="Modificar Cosecha" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<%- include ('../../partials/footer')  %>

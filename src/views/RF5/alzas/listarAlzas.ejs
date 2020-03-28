@@ -1,0 +1,129 @@
+<%- include('../../partials/header.ejs'); %>
+<%- include('../../partials/mensaje.ejs'); %>
+
+<% if(data && data.length > 0) {%>
+
+<% const diferencia = perPage - data.length %>
+    <div class="container mt-5">
+        <div class="button-group">
+            <a href="/colmenas/detalles/<%= id %>&<%= Number(current) %>&<%= idApiario %>" class="btn btn-secondary mb-2"> Volver </a>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <form action="" method="GET" onsubmit="filtrar(this)">
+                    <div class="card">
+                        <h3 class="card-title pt-4 text-center">Alzas y Medias Alzas Registradas</h3>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-borderer table-hover">
+                <thead class="thead-dark">
+                    <tr class="text-center">
+                        <th scope="col">ID Alza</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Acción</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Fecha de Creación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% data.forEach(function(ra) { %>
+      
+                            <tr class="text-center">
+                                <td><%= ra.ID_alza%></td>
+                                <td><%= ra.Descripcion%></td>
+                                <td><%= ra.Accion%></td>
+                                <td><%= ra.Cantidad%></td>
+                                <td><%= ra.Fecha_creacion%></td>
+                            </tr>
+                      
+                    <% }); %>
+                    <% if(data.length < 6) {%>
+                        <% for(let i = 0; i < diferencia; i++) {%>
+                            <tr style="border: none; background-color: white;">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="background-color: white; color:white">Texto</td>
+                            </tr>
+                        <% } %> 
+                    <%}%>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-2">
+            <% if(pages) { %> 
+                <nav class="mx-auto">
+                    <ul class="pagination">
+                        <% if(current == 1) { %>
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link mr-5">Primera Página</a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link">Anterior</a>
+                            </li>
+                        <% } else { %> 
+                            <li class="page-item">
+                                <a href="/colmenas/alzas/listar/<%= id %>&1&<%= idApiario %>" class="page-link mr-5">Primera Página</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="/colmenas/alzas/listar/<%= id %>&<%= Number(current) - 1 %>&<%= idApiario %> " class="page-link">Anterior</a>
+                            </li>
+                        <% } %> 
+
+                        <!-- Paginas -->
+                        <% let i = (Number(current) > 5 ? Number(current) - 4 : 1) %> 
+                        <% if(i !== 1) { %> 
+                            <a href="#" class="page-link">...</a>
+                        <% } %>
+                        <% for(; i <= (Number(current) + 4) && i <= pages; i++) {%> 
+                            <% if(i == current) { %>
+                                <li class="page-item disabled">
+                                    <a href="<%= i %>" class="page-link" style="background: orange; color: white;">
+                                    <%= i %>
+                                    </a>
+                                </li>
+                            <% } else {%> 
+                                <li class="page-item">
+                                    <a href="/colmenas/alzas/listar/<%= id %>&<%= i %>&<%= idApiario %>  " class="page-link">
+                                        <%= i %> 
+                                    </a>
+                                </li>
+                            <% } %>
+                            <% if(i == Number(current) + 4 && i < pages) {%> 
+                                <li class="page-item">
+                                    <a href="#" class="page-link">...</a>
+                                </li>
+                            <% } %> 
+                        <% } %>
+
+                        <!-- Ultima pagina -->
+                        <% if(current == pages) {%> 
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link">Siguiente</a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a href="#>" class="page-link ml-5" > Última Página  </a>
+                            </li>   
+                                                
+                        <% } else {%> 
+                            <li class="page-item">
+                                <a href="/colmenas/alzas/listar/<%= id %>&<%= (Number(current) + 1)%>&<%= idApiario %>" class="page-link">Siguiente</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="/colmenas/alzas/listar/<%= id %>&<%= pages  %>&<%= idApiario %>" class="page-link ml-5"> Última Página  </a>
+                            </li>
+                        <% } %> 
+                    </ul>
+                </nav>
+            <% } %>
+        </div>
+    </div>
+<% } %>
+    
+    
+
+<%- include('../../partials/footer.ejs'); %>

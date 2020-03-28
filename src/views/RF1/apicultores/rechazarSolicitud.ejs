@@ -1,0 +1,80 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+<div id="mensaje"></div>
+
+<script type="application/javascript" src="../../javascript/RF1/validarFormularioApicultor.js"></script>
+
+<div class="container mt-5">
+    <h1 class="text-center">Solicitud a Rechazar</h1>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/apicultores/rechazar/<%= a.ID_apicultor %>" id="formRechazar" method="POST" class="disabled">
+                        <div class="form-group">
+                            <label for="rut">Rut:</label>
+                            <input type="text" class="form-control" name="rut" value="<%= a.ID_apicultor %>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" class="form-control" name="nombre"
+                                value="<%= a.Nombre + " " + a.Apellido_paterno + " " + a.Apellido_materno %>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="correo">Correo:</label>
+                            <input type="text" class="form-control" name="correo" value="<%= a.Correo  %>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="motivoRechazo">Motivo:</label>
+                            <textarea name="motivoRechazo" class="form-control" cols="30" rows="5" placeholder="Explique aqui el motivo de rechazo"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="currentPage" value="<%= currentPage %>">
+                             <!-- Button trigger modal -->
+                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Enviar
+                            </button>
+                            <a href="/apicultores/solicitudes/<%= currentPage %>" class="btn btn-secondary" style="float: right;"> volver</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar Acción</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"> Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="formRechazarSubmit()">Rechazar Solicitud</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    });
+
+    function formRechazarSubmit() {
+        let form = document.getElementById("formRechazar");
+        $('#exampleModal').modal('hide');
+        validarFormularioApicultor(form);
+    }
+</script>
+ 
+
+<%- include ('../../partials/footer')  %>

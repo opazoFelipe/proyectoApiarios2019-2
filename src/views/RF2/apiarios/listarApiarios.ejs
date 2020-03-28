@@ -1,0 +1,53 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+    <div class="container mt-5">
+        <h3>Listado de Apiarios Activos</h3><br/>
+        <table class="table table-borderer table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Región</th>
+                    <th scope="col">Comuna</th>
+                    <th scope="col">Dirección</th>
+                    <th scope="col">Fecha creación</th>
+                    <th scope="col">Dueño</th>
+                    <th scope="col">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <% if (apiariosActivos) { %>
+                    <% apiariosActivos.forEach(function(apiariosActivos) { %>
+                <tr>
+                    <td><%= apiariosActivos.ID_apiario %></td>
+                    <td><%= apiariosActivos.Region %></td>
+                    <td><%= apiariosActivos.Comuna %></td>
+                    <td><%= apiariosActivos.Calle + " " + apiariosActivos.Numero %></td>
+                    <td><%= apiariosActivos.Fecha_creacion %></td>
+                    <td><%= apiariosActivos.Nombre+" "+ apiariosActivos.Apellido_paterno + " " + apiariosActivos.Apellido_materno%></td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="acciones-lista">   
+                        <% if (apiariosActivos.ID_rol == 1 || apiariosActivos.ID_rol == 2) { %>   
+                            <form action="/apiarios/modificar/<%= apiariosActivos.ID_apiario %>" method="POST">
+                                <input type="submit" class="btn btn-success" value="Modificar">
+                            </form>
+                            <form action="/apiarios/listarUsuarios/<%= apiariosActivos.ID_apiario %>" method="POST">
+                                <input type="submit" class="btn btn-primary" value="Usuarios">
+                            </form>                               
+                        <% } %>
+                            <form action="/colmenas/listar/1&<%= apiariosActivos.ID_apiario %>" method="GET">
+                                <input type="submit" class="btn btn-secondary" value="Ver colmenas">
+                            </form>    
+                        </div>
+                    </td>
+                </tr>
+                <% }); %>
+                <% } %>
+                </tr>
+            </tbody>
+        </table><br/>
+    </div>
+
+
+<%- include ('../../partials/footer')  %>

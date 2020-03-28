@@ -1,0 +1,46 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+<!-- Mensaje de la validacion de campos con javascript en el navegador -->
+<div id="mensaje"></div>
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h3>Modificar Rol Apicultor <% if (ID_apicultor) { %><%= ID_apicultor %><% } %> en Apiario <% if (ID_apiario) { %><%= ID_apiario %><% } %></h3>
+            </div>
+            <div class="card-body">
+                <form action="/apiarios/modificarUsuarioDatos/" method="POST" id="formaApiario">
+                    <div class="form-group row">
+                        <label for="apiario" class="col-md-2 col-form-label"><b>Apiario:</b></label>
+                        <div class="col-md-10">
+                            <input type="text" id="apiario" name="apiario" value="<% if (ID_apiario) { %><%= ID_apiario %><% } %>" class="form-control" readonly required>
+                        </div>
+                    </div>                     
+                    <div class="form-group row">
+                        <label for="apicultor" class="col-md-2 col-form-label"><b>Apicultor:</b></label>
+                        <div class="col-md-10">
+                            <input type="text" id="apicultor" name="apicultor" value="<% if (ID_apicultor) { %><%= ID_apicultor %><% } %>" class="form-control" placeholder="Apicultor" readonly required>
+                        </div>
+                    </div>                  
+                    <div class="form-group row">
+                        <label for="roles" class="col-md-2 col-form-label"><b>Rol:</b></label>
+                        <div class="col-md-10"> 
+                            <select class="custom-select" name="roles" id="roles" required>
+                                <option value="2" <% if (dataApicultor) { %><% dataApicultor.forEach(function(Apicultor) { %><% if (Apicultor.ID_rol == 2){%><%= "selected" %><% }});}%>>Administrador</option>
+                                <option value="3" <% if (dataApicultor) { %><% dataApicultor.forEach(function(Apicultor) { %><% if (Apicultor.ID_rol == 3){%><%= "selected" %><% }});}%>>Lector</option>
+                            </select>
+                        </div>
+                    </div>               
+                    <div class="form-group row">
+                        <div class="col-md-10   "></div> 
+                        <div class="col-md-2">
+                            <input type="submit" class="btn btn-primary" id="botonSubmit" value="Modificar Apiario">
+                        </div>
+                    </div>                  
+                </form>
+            </div>
+        </div>
+    </div>
+
+<%- include ('../../partials/footer')  %>

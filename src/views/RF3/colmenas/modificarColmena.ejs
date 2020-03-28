@@ -1,0 +1,440 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+<div id="mensaje"></div>
+
+<script type="application/javascript" src="../../javascript/RF3/funcionesColmenas.js"></script>
+
+<input type="hidden" id="cantidadAlzaInicial" value="<%= dataView.colmena.cantidad_alza %>">
+<input type="hidden" id="idReinaOriginal" value="<%= dataView.colmena.ID_reina %>">
+<input type="hidden" id="idOrigenColmena" value="<%= dataView.colmena.ID_origen %>">
+<input type="hidden" id="idColmena" value="<%= dataView.colmena.ID_colmena %>">
+
+<div class="container mt-5">
+ 
+    <a href="/colmenas/listar/<%= currentPage %>&<%= idApiario %>" class="btn btn-secondary mb-2">Volver</a>
+
+    <div class="card">
+        <div class="card-header">
+            <h3> Modificar Colmena <span class="font-weight-bold ml-5">ID: <%= dataView.colmena.ID_colmena %></span> </h3>
+        </div>
+        <div class="card-body">
+            <form action="/colmenas/actualizar/<%= dataView.colmena.ID_colmena%>&<%= currentPage %>&<%= idApiario %> " method="POST" id="formularioColmena">
+                <% if(!isInactiveColmena) {%> 
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        <label for="idApiario">ID de Apiario:</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" name="idApiario" id="idApiario" value="<%= dataView.colmena.ID_apiario %>" disabled min="0">
+                        <input type="hidden" name="idApiarioHidden" id="idApiarioHidden" value="<%= dataView.colmena.ID_apiario %>">
+                    </div>
+                    <div class="col-md-4">
+                        <!-- Button trigger modalApiario -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalApiario">
+                            Buscar Apiario
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        <label for="selectOrigen">Origen:</label>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select class="form-control" name="selectOrigen" onchange="mostrarInputIdColmena(this)">
+            
+                            <% dataView.origenesColmenas.forEach(function(oc) { %>
+
+                                    <% if(dataView.colmena.ID_origen != oc.ID_origen) { %> 
+
+                                        <option value="<%= oc.ID_origen %>"><%= oc.Descripcion %></option>
+                                        
+                                    <% } else { %> 
+
+                                        <option value="<%= oc.ID_origen %>" selected><%= oc.Descripcion %></option>
+                                        
+                                    <% } %> 
+        
+                            <% }); %> 
+                            
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row" style="display: none;" id="divOrigenColmena">
+                    <div class="col-md-2">
+                        <label for="idColmenaOrigen">ID de Colmena Padre:</label>
+                    </div>
+                    <div class="col-md-4">
+
+                        <% if(dataView.colmena.ID_origen == 3) { %> 
+
+                            <input type="number" class="form-control" name="inputColmenaOrigen" id="inputColmenaOrigen" value="<%= dataView.colmena.ID_padre %>" min="0">
+
+                        <% } else { %> 
+
+                            <input type="number" class="form-control" name="inputColmenaOrigen" id="inputColmenaOrigen" min="0">
+
+                        <% } %> 
+                    </div>
+                </div>
+                <% } %> 
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        <label for="selectEstado">Estado de Colmena:</label>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <select class="form-control" name="selectEstado"">
+            
+                            <% dataView.estados.forEach(function(e) { %>
+
+                                    <% if(dataView.colmena.ID_estado == e.ID_estado) { %> 
+
+                                        <option value="<%= e.ID_estado %>" selected><%= e.Descripcion %></option>
+
+                                    <% } else { %> 
+
+                                        <option value="<%= e.ID_estado %>"><%= e.Descripcion %></option>
+
+                                    <% } %> 
+        
+                            <% }); %> 
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <% if(!isInactiveColmena) {%> 
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4> Reina de la Colmena</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="selectOrigen">ID Reina:</label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                
+                                    <% if(dataView.colmena.ID_reina != null) { %>
+                
+                                    <input type="number" class="form-control" name="idReina" id="idReina" disabled
+                                        value="<%= dataView.colmena.ID_reina %>">
+                                    <input type="hidden" name="idReinaHidden" id="idReinaHidden"
+                                        value="<%= dataView.colmena.ID_reina %>">
+                
+                                    <% } else { %>
+                
+                                    <input type="number" class="form-control" name="idReina" id="idReina" disabled>
+                                    <input type="hidden" name="idReinaHidden" id="idReinaHidden">
+                
+                                    <% } %>
+                
+                                    <!-- Button trigger modalReina -->
+                                    <!-- <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#modalReina">
+                                        Buscar Reina
+                                    </button> -->
+                                    <!-- Button trigger modalNuevaReina -->
+                                    <button type="button" class="btn btn-primary mt-2" data-toggle="modal"
+                                        data-target="#modalNuevaReina">
+                                        Nueva Reina
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <label for="inputRaza">Raza :</label>
+                            </div>
+                            <div class="col-md-5">
+                
+                                <% if(dataView.colmena.Raza != null | dataView.colmena.Raza.length > 0) { %>
+                
+                                <input type="text" class="form-control" name="inputRaza" id="inputRaza" disabled
+                                    value="<%= dataView.colmena.Raza %>">
+                
+                                <% } else { %>
+                
+                                <input type="text" class="form-control" name="inputRaza" id="inputRaza" disabled>
+                
+                                <% } %>
+                
+                            </div>
+                        </div>
+                
+                        <div class="form-group row" style="display: none;" id="divMotivoCambioReina">
+                            <div class="col-md-2">
+                                <label for="motivoCambioReina">Motivo de Cambio de Reina:</label>
+                            </div>
+                            <div class="col-md-4">
+                
+                                <textarea name="motivoCambioReina" class="form-control" id="motivoCambioReina" cols="10" rows="5"
+                                    placeholder="Explique el motivo de cambio de Reina"></textarea>
+                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Alza Incial</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-2 form-group">
+                                <label for="selectTipoAlza">Tipo alza:</label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <select class="form-control" name="selectTipoAlza" id="selectTipoAlza" onchange="cambiarCantidadAlza(this)">
+                    
+                                    <% dataView.tiposAlzas.forEach(function(ta) { %>
+
+                                        <% if(dataView.colmena.ID_tipoAlza == ta.ID_tipoAlza) { %> 
+
+                                            <option value="<%= ta.ID_tipoAlza %>" selected><%= ta.Descripcion %></option>
+
+                                        <% } else { %> 
+
+                                            <option value="<%= ta.ID_tipoAlza %>"><%= ta.Descripcion %></option>
+
+                                        <% } %> 
+                
+                                    <% }); %> 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1 form-group">
+                                <label for="selectCantidadAlza">Cantidad:</label>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <select class="form-control" name="selectCantidadAlza" id="selectCantidadAlza">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %> 
+                <div class="form-group">
+                    <!-- Button trigger Guardar Colmena -->
+                    <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#exampleModal">
+                        Guardar
+                    </button>
+                    <a href="/colmenas/modificar/<%= dataView.colmena.ID_colmena %>&<%= currentPage %>&<%= idApiario %>" class="btn btn-secondary mt-2 text-white">Valores por defecto</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Buscar Apiario -->
+<div class="modal fade" id="modalApiario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Buscar Apiario por ID</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container mt-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="#" onsubmit="buscarApiarioPorID(this)">
+                                <div class="form-group">
+                                    <label for="idApiario">Ingrese ID</label>
+                                    <input type="number" name="idApiario" id="idApiario" class="form-control">
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-md-4 offset-md-2">
+                                        <input type="submit" value="Buscar ID" class="btn btn-primary">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="table-responsive" id="divDatosApiarioEncontrados" style="display: none;">
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Dirección</th>
+                                            <th scope="col">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bodyTablaApiario">
+            
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Buscar Reina -->
+<div class="modal fade" id="modalReina" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Buscar Reina por ID</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container mt-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="#" onsubmit="buscarReinaPorID(this)">
+                                <div class="form-group">
+                                    <label for="idReina">Ingrese ID</label>
+                                    <input type="number" name="idReina" id="" class="form-control">
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-md-4 offset-md-2">
+                                        <input type="submit" value="Buscar ID" class="btn btn-primary">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="table-responsive" id="divDatosEncontrados" style="display: none;">
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Descripción</th>
+                                            <th scope="col">Raza</th>
+                                            <th scope="col">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bodyTablaReina">
+            
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+
+        let selectTipoAlza = document.getElementById("selectTipoAlza");
+        let selectCantidadAlza = document.getElementById("selectCantidadAlza");
+        let cantidadAlzaIncial = document.getElementById("cantidadAlzaInicial").value;
+
+        if(selectTipoAlza.value == 2) 
+        {  
+            selectCantidadAlza.innerHTML = "";
+
+            for(let i = 0; i < 9; i++) {
+
+                let option = document.createElement("option");
+                option.value = i;
+                option.innerHTML = i;
+
+                if(i == cantidadAlzaIncial) option.selected = true;
+
+                selectCantidadAlza.appendChild(option);
+
+            }
+        }
+        if(selectTipoAlza.value == 1) 
+        {
+            selectCantidadAlza.innerHTML = "";
+
+            for(let i = 0; i < 5; i++) {
+                let option = document.createElement("option");
+                option.value = i;
+                option.innerHTML = i;
+
+                if(i == cantidadAlzaIncial) option.selected = true;
+
+                selectCantidadAlza.appendChild(option);
+            }
+        }
+
+        if(document.getElementById("idOrigenColmena").value == 3) {
+            document.getElementById("divOrigenColmena").style = "";
+        }
+    }
+</script>
+
+<!-- Modal Ingresar Nueva Reina -->
+<div class="modal fade" id="modalNuevaReina" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ingresar Nueva Reina</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container mt-2">
+                    <div class="card" style="border: none;">
+                        <div class="card-body">
+                            <form action="" onsubmit="guardarReina(this)">
+                                <div class="form-group row">
+                                    <label for="raza">Raza Reina:</label>
+                                    <input type="text" class="form-control" name="raza" id="raza">
+                                </div>
+                                <div class="form-group row">                                
+                                    <label for="descripcion">Descripción Reina:</label>
+                                    <textarea name="descripcion" id="descripcion" class="form-control" cols="10" rows="4"
+                                        placeholder="Ingrese descripción para nueva Reina"></textarea>                               
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary form-control" value="Guardar">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function enviarFormularioColmena2() {
+        document.getElementById("formularioColmena").submit();
+    }
+
+</script>
+
+<!-- Modal Confirmar Accion -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar Acción</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <% if(!isInactiveColmena) {%> 
+                <button type="button" class="btn btn-primary" onclick="enviarFormularioColmena()"> Guardar Colmena</button>
+                <% } else { %> 
+                    <button type="button" class="btn btn-primary" onclick="enviarFormularioColmena2()"> Guardar Colmena</button>
+                <% } %> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include ('../../partials/footer')  %>

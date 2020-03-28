@@ -1,0 +1,49 @@
+<%- include ('../../partials/header')  %>
+
+<%- include ('../../partials/mensaje')  %>
+
+<div id="mensaje"></div>
+
+<script type="application/javascript" src="../javascript/RF1/validarFormularioApicultor.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <div class="card-title text-center"><h2>Modificar Datos</h2></div>
+                </div>
+                <div class="card-body">
+                    <form action="/apicultores/modificarDatos" method="POST">
+                        <div class="form-group">
+                            <label for="rut">Rut:</label>
+                            <input type="text" name="rut" class="form-control" disabled placeholder="Rut" value="<%= user.ID_apicultor %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="correo">Correo:</label>
+                            <input type="email" name="correo" class="form-control" placeholder="Correo" value="<%= user.Correo %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" name="nombre" class="form-control" placeholder="Nombre" value="<%= user.Nombre %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="apellidoPaterno">Apellido Paterno:</label>
+                            <input type="text" name="apellidoPaterno" class="form-control" placeholder="Apellido Paterno" value="<%= user.Apellido_paterno %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="apellidoMaterno">Apellido Materno:</label>
+                            <input type="text" name="apellidoMaterno" class="form-control" placeholder="Apellido Materno" value="<%= user.Apellido_materno %>">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary" value="Guardar" onclick="validarFormularioApicultor(this.form)">
+                            <a href="/apicultores/datos" class="btn btn-secondary" style="float: right;">Volver</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include ('../../partials/footer')  %>

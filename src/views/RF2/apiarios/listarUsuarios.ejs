@@ -1,0 +1,54 @@
+<%- include ('../../partials/header')  %>
+<%- include ('../../partials/mensaje')  %>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-9">
+                <h3>Usuarios Apiario N°<% if (id) { %><%= id %><% }%></h3>
+                <form action="/apiarios/asignarApicultor/<% if (id) { %><%= id %><% }%>" method="POST">
+                    <input type="submit" class="btn btn-primary" value="Asignar Usuarios">
+                </form>  
+            </div>
+        </div>    
+        <br/>
+        <table class="table table-borderer table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Rut</th>
+                    <th scope="col">Rol</th>
+                    <th scope="col">Fecha Inicio</th>
+                    <th scope="col">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <% if (usuarios) { %>
+                    <% usuarios.forEach(function(usuarios) { %>
+                <tr>
+                    <td><%= usuarios.Nombre + " " + usuarios.Apellido_paterno + " " + usuarios.Apellido_materno %></td>
+                    <td><%= usuarios.ID_apicultor %></td>
+                    <td><%= usuarios.Descripcion %></td>
+                    <td><%= usuarios.Fecha %></td>
+                    <td>
+                        <% if (usuarios.ID_rol == 2 || usuarios.ID_rol == 3) { %>
+                        <div class="btn-group" role="group" aria-label="acciones-lista">    
+                            <form action="/apiarios/modificarUsuario/<%= usuarios.ID_apicultor %>/<% if (id) { %><%= id %><% }%>" method="POST">
+                                <input type="submit" class="btn btn-primary" value="Modificar">
+                            </form>
+                            <form action="/apiarios/eliminarUsuario/<%= usuarios.ID_apicultor %>/<% if (id) { %><%= id %><% }%>" method="POST">
+                                <input type="submit" class="btn btn-danger" value="Eliminar">
+                            </form>                               
+                        </div>
+                        <% } %>
+                    </td>
+                </tr>
+                <% }); %>
+                <% } %>
+                </tr>
+            </tbody>
+        </table><br/>
+    </div>
+
+
+<%- include ('../../partials/footer')  %>
