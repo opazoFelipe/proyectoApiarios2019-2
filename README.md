@@ -7,13 +7,13 @@ El proyecto presente en este repositorio corresponde a una plataforma web enfoca
 El proyecto se encuentra almacenado en el repositorio: 
 
 ```
-http://gitlabtrans.face.ubiobio.cl/tddfelipebenjamin/apicultoresrdd
+https://github.com/opazoFelipe/proyectoApiarios2019-2.git
 ```
 
 Para poder adquirir una copia, tan solo es necesario tener instalado git y realizar el comando:
 
 ```
-git clone http://gitlabtrans.face.ubiobio.cl/tddfelipebenjamin/apicultoresrdd
+git clone https://github.com/opazoFelipe/proyectoApiarios2019-2.git
 ```
 
 Opcionalmente, se pueden descargar directamente desde la página web del repositorio.
@@ -60,10 +60,10 @@ En la base de datos, cambiando 'root' por cualquier usuario con privilegios que 
 
 Serie de pasos para poder ejecutar el proyecto
 
-Clonar del repositorio http://gitlabtrans.face.ubiobio.cl:8081/tddfelipebenjamin/apicultoresrdd.git
+Clonar del repositorio https://github.com/opazoFelipe/proyectoApiarios2019-2.git
 
 ```
-git clone http://gitlabtrans.face.ubiobio.cl:8081/tddfelipebenjamin/apicultoresrdd.git
+git clone https://github.com/opazoFelipe/proyectoApiarios2019-2.git
 ```
 Ingresar al directorio del proyecto clonado
 
